@@ -1,0 +1,104 @@
+mutlukodcu_j17_chart_color_microservice/
+├── backend/
+│   ├── auth-service/
+│   │   ├── src/
+│   │   ├── Dockerfile
+│   │   └── pom.xml
+│
+│   ├── color-service/
+│   │   ├── src/
+│   │   │   └── main/
+│   │   │       ├── java/
+│   │   │       │   └── com/mutlukodcu/colorservice/
+│   │   │       │   ├── controller/
+│   │   │       │   ├── domain/
+│   │   │       │   ├── dto/
+│   │   │       │   ├── kafka/                  # ✅ ColorProducer.java
+│   │   │       │   ├── repository/
+│   │   │       │   ├── service/
+│   │   │       │   └── ColorServiceApplication.java
+│   │   │       └── resources/
+│   │   │           └── application.yml         # ✅ asıl konumu
+│   │   ├── Dockerfile
+│   │   └── pom.xml
+│
+│   ├── photo-gallery-service/
+│   │   ├── src/
+│   │   │   └── main/
+│   │   │       ├── java/
+│   │   │       │   └── com/mutlukodcu/photogalleryservice/
+│   │   │       │   ├── controller/
+│   │   │       │   │   └── PhotoController.java
+│   │   │       │   ├── service/
+│   │   │       │   │   └── PhotoService.java
+│   │   │       │   ├── repository/
+│   │   │       │   │   └── PhotoRepository.java
+│   │   │       │   ├── domain/
+│   │   │       │   │   └── Photo.java
+│   │   │       │   ├── kafka/
+│   │   │       │   │   └── PhotoProducer.java
+│   │   │       │   └── PhotoGalleryServiceApplication.java
+│   │   │       └── resources/
+│   │   │           └── application.yml         # ✅ asıl konumu
+│   │   ├── sample-images/
+│   │   │   ├── doga1.jpg
+│   │   │   ├── hayvan1.jpg
+│   │   │   └── mimari1.jpg
+│   │   ├── Dockerfile
+│   │   └── pom.xml
+│
+│   ├── color-analysis-consumer/
+│   │   ├── src/
+│   │   │   └── main/
+│   │   │       ├── java/
+│   │   │       │   └── com/mutlukodcu/coloranalysisconsumer/
+│   │   │       │   ├── consumer/                # ✅ Kafka Consumer
+│   │   │       │   ├── service/                 # ✅ Renk analiz servisi
+│   │   │       │   ├── util/                    # ✅ Görsel işleme yardımcıları
+│   │   │       │   └── ColorAnalysisConsumerApplication.java
+│   │   │       └── resources/
+│   │   │           └── application.yml          # ✅ asıl konumu
+│   │   ├── Dockerfile
+│   │   └── pom.xml
+│
+├── shared-lib/
+│   ├── src/
+│   │   └── main/java/com/mutlukodcu/shared/
+│   │       ├── dto/
+│   │       │   ├── UserDTO.java
+│   │       │   ├── ColorDTO.java
+│   │       │   ├── PhotoDTO.java
+│   │       ├── domain/
+│   │       ├── kafka/
+│   │       │   ├── ColorEvent.java
+│   │       │   ├── PhotoEvent.java
+│   │       │   └── AnalysisResultEvent.java
+│   │       ├── exception/
+│   │       │   ├── GlobalExceptionHandler.java
+│   │       │   └── ResourceNotFoundException.java
+│   └── pom.xml
+│
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── RegisterPage.jsx
+│   │   │   ├── ColorManager.jsx
+│   │   │   ├── PhotoUploader.jsx
+│   │   │   ├── Gallery.jsx
+│   │   │   ├── AnalysisChart.jsx
+│   │   │   └── ExcelExportButton.jsx
+│   │   ├── services/
+│   │   │   ├── authService.js
+│   │   │   ├── colorService.js
+│   │   │   ├── photoService.js
+│   │   │   └── analysisService.js
+│   │   ├── App.jsx
+│   │   └── index.js
+│   ├── Dockerfile
+│   └── package.json
+│
+├── docker-compose.yml
+├── README.md
+└── init.sql

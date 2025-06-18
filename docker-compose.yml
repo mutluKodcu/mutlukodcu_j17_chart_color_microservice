@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  # Zookeeper
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.2.1
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  # Kafka
+  kafka:
+    image: confluentinc/cp-kafka:7.2.1
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  # PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB: photodb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ./backend/auth-service
+    container_name: auth-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+    depends_on:
+      - postgres
+
+  # Photo Gallery Service
+  photo-gallery-service:
+    build:
+      context: ./backend/photo-gallery-service
+    container_name: photo-gallery-service
+    ports:
+      - "8081:8081"
+    depends_on:
+      - kafka
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+    volumes:
+      - ./backend/photo-gallery-service/sample-images:/app/sample-images
+
+  # Color Service
+  color-service:
+    build:
+      context: ./backend/color-service
+    container_name: color-service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - kafka
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+
+  # Color Analysis Consumer
+  color-analysis-consumer:
+    build:
+      context: ./backend/color-analysis-consumer
+    container_name: color-analysis-consumer
+    depends_on:
+      - kafka
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+
+  # Frontend (React)
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+      - color-service
+      - photo-gallery-service
+
+networks:
+  default:
+    name: color-app-network

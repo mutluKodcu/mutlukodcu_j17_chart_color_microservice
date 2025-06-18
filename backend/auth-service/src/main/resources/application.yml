@@ -1,0 +1,23 @@
+// auth-service/src/main/resources/application.yml placeholder
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/authdb
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+jwt:
+  secret: verysecretkeymutlu
+  expiration: 86400000  # 1 gün ms cinsinden
+
+kafka:
+  bootstrap-servers: kafka:9092
+  consumer-group-id: auth-group
